@@ -22,6 +22,10 @@ from .fp16_util import MixedPrecisionTrainer
 from .nn import update_ema
 from .resample import LossAwareSampler, UniformSampler
 
+import glob
+import re
+import tqdm
+
 # For ImageNet experiments, this was a good default value.
 # We found that the lg_loss_scale quickly climbed to
 # 20-21 within the first ~1K steps of training.
@@ -380,6 +384,7 @@ class TrainLoop:
             self.opt.load_state_dict(state_dict)
 
     def run_loop(self):
+        pbar=tqdm.tqdm(initial=self.resume_step, total=200000+1)
         while (
             (not self.lr_anneal_steps
             or self.step + self.resume_step < self.lr_anneal_steps) and self.step < 200000+1
@@ -416,6 +421,7 @@ class TrainLoop:
                 if os.environ.get("DIFFUSION_TRAINING_TEST", "") and self.step > 0:
                     return
             self.step += 1
+            pbar.update(1)
         # Save the last checkpoint if it wasn't already saved.
         if (self.step - 1) % self.save_interval != 0:
             self.save()
@@ -552,16 +558,27 @@ def parse_resume_step_from_filename(filename):
         return 0
 
 
+CKPT_DIR="/checkpoint/kaselby/fsdm/"
+
 def get_blob_logdir():
     # You can change this to be a separate path to save checkpoints to
     # a blobstore or some external drive.
-    return logger.get_dir()
+
+    #return logger.get_dir()
+    return CKPT_DIR
 
 
 def find_resume_checkpoint():
     # On your infrastructure, you may want to override this to automatically
     # discover the latest checkpoint on your blob storage, etc.
-    return None
+    #checkpoint=
+    ckpts = glob.glob(os.path.join(CKPT_DIR+"model*.pt"))
+    if len(ckpts) > 0:
+        ckpt_steps = [int(re.search("model([0-9]+).pt", ckpt).group(1)) for ckpt in ckpts]
+        last_ckpt = sorted(zip(ckpts, ckpt_steps), key=lambda x: x[1])[-1][0]
+        return last_ckpt
+    else:
+        return None
 
 
 def find_ema_checkpoint(main_checkpoint, step, rate):
