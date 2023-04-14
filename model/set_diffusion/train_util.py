@@ -324,7 +324,7 @@ class TrainLoop:
                 for _ in range(len(self.ema_rate))
             ]
 
-        if th.cuda.is_available():
+        if False:#th.cuda.is_available():
             self.use_ddp = True
             
             # self.ddp_model = DDP(
@@ -349,10 +349,10 @@ class TrainLoop:
 
         if resume_checkpoint:
             self.resume_step = parse_resume_step_from_filename(resume_checkpoint)
-            if dist.get_rank() == 0:
+            if not dist.is_initialized() or dist.get_rank() == 0:
                 logger.log(f"loading model from checkpoint: {resume_checkpoint}...")
                 self.model.load_state_dict(
-                        resume_checkpoint, map_location="cpu"
+                        resume_checkpoint, map_location="cuda"
                 )
 
         # dist_util.sync_params(self.model.parameters())
@@ -363,10 +363,10 @@ class TrainLoop:
         main_checkpoint = find_resume_checkpoint() or self.resume_checkpoint
         ema_checkpoint = find_ema_checkpoint(main_checkpoint, self.resume_step, rate)
         if ema_checkpoint:
-            if dist.get_rank() == 0:
+            if not dist.is_initialized() or dist.get_rank() == 0:
                 logger.log(f"loading EMA from checkpoint: {ema_checkpoint}...")
                 state_dict = th.load_state_dict(
-                    ema_checkpoint, map_location="cpu"
+                    ema_checkpoint, map_location="cuda"
                 )
                 ema_params = self.mp_trainer.state_dict_to_master_params(state_dict)
         return ema_params
@@ -379,7 +379,7 @@ class TrainLoop:
         if bf.exists(opt_checkpoint):
             logger.log(f"loading optimizer state from checkpoint: {opt_checkpoint}")
             state_dict = th.load_state_dict(
-                opt_checkpoint, map_location="cpu"
+                opt_checkpoint, map_location="cuda"
             )
             self.opt.load_state_dict(state_dict)
 
