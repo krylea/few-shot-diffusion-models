@@ -351,9 +351,9 @@ class TrainLoop:
             self.resume_step = parse_resume_step_from_filename(resume_checkpoint)
             if not dist.is_initialized() or dist.get_rank() == 0:
                 logger.log(f"loading model from checkpoint: {resume_checkpoint}...")
-                self.model.load_state_dict(
-                        resume_checkpoint
-                )
+                self.model.load_state_dict(th.load(
+                        resume_checkpoint, map_location="cuda"
+                ))
 
         # dist_util.sync_params(self.model.parameters())
 
@@ -365,8 +365,8 @@ class TrainLoop:
         if ema_checkpoint:
             if not dist.is_initialized() or dist.get_rank() == 0:
                 logger.log(f"loading EMA from checkpoint: {ema_checkpoint}...")
-                state_dict = th.load_state_dict(
-                    ema_checkpoint
+                state_dict = th.load(
+                    ema_checkpoint, map_location="cuda"
                 )
                 ema_params = self.mp_trainer.state_dict_to_master_params(state_dict)
         return ema_params
@@ -378,8 +378,8 @@ class TrainLoop:
         )
         if bf.exists(opt_checkpoint):
             logger.log(f"loading optimizer state from checkpoint: {opt_checkpoint}")
-            state_dict = th.load_state_dict(
-                opt_checkpoint
+            state_dict = th.load(
+                opt_checkpoint, map_location="cuda"
             )
             self.opt.load_state_dict(state_dict)
 
