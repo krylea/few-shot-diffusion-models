@@ -10,4 +10,4 @@
 #SBATCH --exclude=gpu109
 
 
-sh script/main.sh 4 vfsddpm_cifar100_vit_film_mean_sigma
+sh script/main.sh 0 vfsddpm_cifar100_vit_lag_meanpatch_sigma
