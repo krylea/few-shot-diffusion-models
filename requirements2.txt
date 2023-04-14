@@ -34,6 +34,5 @@ tensorboardX==2.4
 tfrecord==1.14.1
 tifffile==2020.10.1
 torch==1.6.0
-torchaudio==0.8.0
 torchvision==0.7.0
 vit-pytorch==0.22.0
