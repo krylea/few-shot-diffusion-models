@@ -82,7 +82,7 @@ def create_argparser():
         mode_conditioning='film', # conditions using film, lag conditions using attention, None standard DDPM, film+lag
         augment=False,
         device="cuda",
-        data_dir="/home/gigi/ns_data",
+        data_dir="data",
         schedule_sampler="uniform",
         num_classes=1,
         lr=1e-4,
