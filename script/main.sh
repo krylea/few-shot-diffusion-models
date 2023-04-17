@@ -87,7 +87,7 @@ case $RUN in
       run 32 3 vfsddpm cifar100 vit lag mean_patch deterministic 8 5 32 64
       ;;
     vfsddpm_animalfaces_vit_lag_meanpatch_sigma)
-      run 128 3 vfsddpm cifar100 vit lag mean_patch deterministic 8 5 32 64
+      run 128 3 vfsddpm animalfaces vit lag mean_patch deterministic 8 5 32 64
       ;;
 
     vfsddpm_cifar100_vit_lag_agg_sigma)

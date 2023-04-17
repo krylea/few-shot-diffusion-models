@@ -22,7 +22,7 @@ def select_dataset(args, split):
         "augment": args.augment,
     }
 
-    if args.dataset in ["cifar100", "cifar100mix", "cub", "minimagenet", "doublemnist", "triplemnist"]:
+    if args.dataset in ["cifar100", "cifar100mix", "cub", "minimagenet", "doublemnist", "triplemnist", "animalfaces"]:
         dataset = BaseSetsDataset(**kwargs)
     
     elif args.dataset == "celeba":

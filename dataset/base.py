@@ -39,6 +39,7 @@ class BaseSetsDataset(data.Dataset):
                     "cifar100":     {"size": 32, "img_cls": 600, "nc": 3, "tr":60, "vl":20, "ts": 20},
                     "cifar100mix":     {"size": 32, "img_cls": 600, "nc": 3, "tr":60, "vl":20, "ts": 20},
                     "cub":          {"size": 64, "img_cls": 60, "nc": 3, "tr": 100, "val": 50, "ts": 50},
+                    "animalfaces": {"size": 128, "img_cls":1119, "nc": 3, "tr": 119, "vl": -1, "ts": 30}
                     }
         self.data_dir = data_dir
         self.split = split
