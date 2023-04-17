@@ -535,6 +535,8 @@ class TrainLoop:
         ) as f:
             th.save(self.opt.state_dict(), f)
 
+        
+
         #dist.barrier()
 
 
