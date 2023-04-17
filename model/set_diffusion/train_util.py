@@ -340,7 +340,7 @@ class TrainLoop:
             self.ddp_model = self.model
 
     def _load_and_sync_parameters(self):
-        resume_checkpoint = find_resume_checkpoint() or self.resume_checkpoint
+        resume_checkpoint = find_resume_checkpoint(self.args) or self.resume_checkpoint
 
         if resume_checkpoint:
             self.resume_step = parse_resume_step_from_filename(resume_checkpoint)
@@ -355,7 +355,7 @@ class TrainLoop:
     def _load_ema_parameters(self, rate):
         ema_params = copy.deepcopy(self.mp_trainer.master_params)
 
-        main_checkpoint = find_resume_checkpoint() or self.resume_checkpoint
+        main_checkpoint = find_resume_checkpoint(self.args) or self.resume_checkpoint
         ema_checkpoint = find_ema_checkpoint(main_checkpoint, self.resume_step, rate)
         if ema_checkpoint:
             if not dist.is_initialized() or dist.get_rank() == 0:
@@ -367,7 +367,7 @@ class TrainLoop:
         return ema_params
 
     def _load_optimizer_state(self):
-        main_checkpoint = find_resume_checkpoint() or self.resume_checkpoint
+        main_checkpoint = find_resume_checkpoint(self.args) or self.resume_checkpoint
         opt_checkpoint = bf.join(
             bf.dirname(main_checkpoint), f"opt{self.resume_step:06}.pt"
         )
@@ -521,7 +521,7 @@ class TrainLoop:
                 filename = f"model{(self.step+self.resume_step):06d}.pt"
             else:
                 filename = f"ema_{rate}_{(self.step+self.resume_step):06d}.pt"
-            with bf.BlobFile(bf.join(get_blob_logdir(), filename), "wb") as f:
+            with bf.BlobFile(bf.join(get_blob_logdir(self.args), filename), "wb") as f:
                 th.save(state_dict, f)
 
         save_checkpoint(0, self.mp_trainer.master_params)
@@ -530,7 +530,7 @@ class TrainLoop:
 
         #if dist.get_rank() == 0:
         with bf.BlobFile(
-            bf.join(get_blob_logdir(), f"opt{(self.step+self.resume_step):06d}.pt"),
+            bf.join(get_blob_logdir(self.args), f"opt{(self.step+self.resume_step):06d}.pt"),
             "wb",
         ) as f:
             th.save(self.opt.state_dict(), f)
@@ -557,19 +557,19 @@ def parse_resume_step_from_filename(filename):
 
 CKPT_DIR="/checkpoint/kaselby/fsdm/"
 
-def get_blob_logdir():
+def get_blob_logdir(args):
     # You can change this to be a separate path to save checkpoints to
     # a blobstore or some external drive.
 
     #return logger.get_dir()
-    return CKPT_DIR
+    return os.path.join(CKPT_DIR, args.dataset)
 
 
-def find_resume_checkpoint():
+def find_resume_checkpoint(args):
     # On your infrastructure, you may want to override this to automatically
     # discover the latest checkpoint on your blob storage, etc.
     #checkpoint=
-    ckpts = glob.glob(os.path.join(CKPT_DIR+"model*.pt"))
+    ckpts = glob.glob(os.path.join(CKPT_DIR, args.dataset, "model*.pt"))
     if len(ckpts) > 0:
         ckpt_steps = [int(re.search("model([0-9]+).pt", ckpt).group(1)) for ckpt in ckpts]
         last_ckpt = sorted(zip(ckpts, ckpt_steps), key=lambda x: x[1])[-1][0]
