@@ -93,8 +93,9 @@ class BaseSetsDataset(data.Dataset):
                 value = np.expand_dims(value, axis=1)
             # if less than img_cls, fill residual
             residual = self.img_cls - value.shape[0]
-            if residual > 0:
+            while residual > 0:
                 value = np.vstack([value, value[:residual]])
+                residual = self.img_cls - value.shape[0]
             # if data is not rescaled between [0, 1] or [-1, 1]
             if np.max(value) > 1:
                 # / 255
