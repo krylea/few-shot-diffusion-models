@@ -39,7 +39,7 @@ class BaseSetsDataset(data.Dataset):
                     "cifar100":     {"size": 32, "img_cls": 600, "nc": 3, "tr":60, "vl":20, "ts": 20},
                     "cifar100mix":     {"size": 32, "img_cls": 600, "nc": 3, "tr":60, "vl":20, "ts": 20},
                     "cub":          {"size": 64, "img_cls": 60, "nc": 3, "tr": 100, "val": 50, "ts": 50},
-                    "animalfaces": {"size": 128, "img_cls":1119, "nc": 3, "tr": 119, "vl": -1, "ts": 30}
+                    "animalfaces": {"size": 128, "img_cls":1114, "nc": 3, "tr": 119, "vl": -1, "ts": 30}
                     }
         self.data_dir = data_dir
         self.split = split
@@ -86,11 +86,12 @@ class BaseSetsDataset(data.Dataset):
         for i, k in enumerate(file):
 
             map_cls[i] = k
-            value = file[k]
+            value = file[k][:self.img_cls]
             
             # if only one channel (1, img_dim, img_dim)
             if self.dataset in ["doublemnist", "triplemnist"]:
                 value = np.expand_dims(value, axis=1)
+            
             # if less than img_cls, fill residual
             residual = self.img_cls - value.shape[0]
             while residual > 0:
