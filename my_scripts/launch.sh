@@ -4,7 +4,7 @@
 #SBATCH --open-mode=append
 #SBATCH --ntasks=1
 #SBATCH --gres=gpu:1
-#SBATCH --partition=rtx6000,t4v2
+#SBATCH --partition=a40
 #SBATCH --cpus-per-gpu=4
 #SBATCH --mem=45GB
 #SBATCH --exclude=gpu109
