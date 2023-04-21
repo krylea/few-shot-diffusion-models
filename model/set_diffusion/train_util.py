@@ -262,6 +262,7 @@ class TrainLoop:
         ema_rate,
         log_interval,
         save_interval,
+        eval_interval,
         resume_checkpoint,
         use_fp16=False,
         fp16_scale_growth=1e-3,
@@ -286,6 +287,7 @@ class TrainLoop:
         )
         self.log_interval = log_interval
         self.save_interval = save_interval
+        self.eval_interval = eval_interval
         self.resume_checkpoint = resume_checkpoint
         self.use_fp16 = use_fp16
         self.fp16_scale_growth = fp16_scale_growth
