@@ -43,7 +43,7 @@ def main():
 
     train_loader = create_loader(args, split="train", shuffle=True)
     # evaluation is expensive...perform it only when saving models
-    val_loader = create_loader(args, split="val", shuffle=False)
+    val_loader = create_loader(args, split="test", shuffle=False)
 
     logger.log("training...")
     TrainLoop(
@@ -94,8 +94,8 @@ def create_argparser():
         microbatch=-1,  # -1 disables microbatches
         ema_rate="0.9999",  # comma-separated list of EMA values
         log_interval=1000,
-        save_interval=250,
-        eval_interval=3000,
+        save_interval=500,
+        eval_interval=10000,
         resume_checkpoint="",
         use_fp16=False,
         fp16_scale_growth=1e-3,
