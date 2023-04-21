@@ -380,9 +380,11 @@ class TrainLoop:
 
     def run_loop(self):
         pbar=tqdm.tqdm(initial=self.resume_step, total=200000+1)
+        if self.resume_step > 0:
+            self.step = self.step + self.resume_step
         while (
             (not self.lr_anneal_steps
-            or self.step + self.resume_step < self.lr_anneal_steps) and self.step < 200000+1
+            or self.step < self.lr_anneal_steps) and self.step < 200000+1
         ):
             cond=None
             try:
@@ -398,8 +400,13 @@ class TrainLoop:
                 logger.dumpkvs(step=self.step)
                 # logger.logkv_wb("step", self.step + self.resume_step)
                 # logger.logkv_wb("samples", (self.step + self.resume_step + 1) * self.global_batch)
-            if self.step % self.save_interval == 0 and self.step > 0:
+            if self.step % self.save_interval == 0 and self.step > self.resume_step:
                 self.save()
+
+                # Run for a finite amount of time in integration tests.
+                if os.environ.get("DIFFUSION_TRAINING_TEST", "") and self.step > self.resume_step:
+                    return
+            if self.step % self.eval_interval == 0 and self.step > self.resume_step:
                 # eval on 100 sets with ema? model
                 self.model.eval()
                 try:
@@ -411,10 +418,6 @@ class TrainLoop:
                 except RuntimeError:
                     self.val_loader = iter(self.val_loader)
                 self.model.train()
-
-                # Run for a finite amount of time in integration tests.
-                if os.environ.get("DIFFUSION_TRAINING_TEST", "") and self.step > 0:
-                    return
             self.step += 1
             pbar.update(1)
         # Save the last checkpoint if it wasn't already saved.
