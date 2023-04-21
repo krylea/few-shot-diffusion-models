@@ -512,8 +512,8 @@ class TrainLoop:
             param_group["lr"] = lr
 
     def log_step(self):
-        logger.logkv("step", self.step + self.resume_step)
-        logger.logkv("samples", (self.step + self.resume_step + 1) * self.global_batch)
+        logger.logkv("step", self.step)
+        logger.logkv("samples", (self.step + 1) * self.global_batch)
         
     def save(self):
         def save_checkpoint(rate, params):
@@ -521,10 +521,10 @@ class TrainLoop:
             #if dist.get_rank() == 0:
             logger.log(f"saving model {rate}...")
             if not rate:
-                filename = f"model{(self.step+self.resume_step):06d}.pt"
+                filename = f"model{(self.step):06d}.pt"
                 prev_ckpts = glob.glob(os.path.join(get_blob_logdir(self.args), f"model*.pt"))
             else:
-                filename = f"ema_{rate}_{(self.step+self.resume_step):06d}.pt"
+                filename = f"ema_{rate}_{(self.step):06d}.pt"
                 prev_ckpts = glob.glob(os.path.join(get_blob_logdir(self.args), f"ema_{rate}_*.pt"))
 
             #remove prev ckpts
@@ -543,7 +543,7 @@ class TrainLoop:
         for ckpt in prev_ckpts:
             os.remove(ckpt)
         with bf.BlobFile(
-            bf.join(get_blob_logdir(self.args), f"opt{(self.step+self.resume_step):06d}.pt"),
+            bf.join(get_blob_logdir(self.args), f"opt{(self.step):06d}.pt"),
             "wb",
         ) as f:
             th.save(self.opt.state_dict(), f)
