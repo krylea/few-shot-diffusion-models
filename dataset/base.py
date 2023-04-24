@@ -116,7 +116,7 @@ class BaseSetsDataset(data.Dataset):
     def __getitem__(self, item, lbl=None):
         samples = self.data['inputs'][item]
         # all datasets should be in [0, 1]
-        if self.dataset in ['minimagenet', 'cub', 'cifar100', "celeba", "omniglot_back_eval",  "cifar100mix"]: #and self.norm:
+        if self.dataset in ['minimagenet', 'cub', 'cifar100', "celeba", "omniglot_back_eval",  "cifar100mix", "animalfaces", "flowers", "vggface"]: #and self.norm:
 
             if self.dataset == "omniglot_back_eval":
                 # dequantize
