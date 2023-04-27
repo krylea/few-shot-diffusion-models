@@ -40,7 +40,7 @@ class BaseSetsDataset(data.Dataset):
                     "cifar100mix":     {"size": 32, "img_cls": 600, "nc": 3, "tr":60, "vl":20, "ts": 20},
                     "cub":          {"size": 64, "img_cls": 60, "nc": 3, "tr": 100, "val": 50, "ts": 50},
                     "animalfaces": {"size": 128, "img_cls":720, "nc": 3, "tr": 119, "vl": -1, "ts": 30},
-                    "flowers": {"size": 128, "img_cls":252, "nc": 3, "tr": 85, "vl": -1, "ts": 17},
+                    "flowers": {"size": 128, "img_cls":250, "nc": 3, "tr": 85, "vl": -1, "ts": 17},
                     "vggface": {"size": 128, "img_cls":100, "nc": 3, "tr": 1802, "vl": -1, "ts": 552}
                     }
         self.data_dir = data_dir
@@ -48,7 +48,7 @@ class BaseSetsDataset(data.Dataset):
         self.dataset = dataset
         self.augment = augment
         self.binarize = binarize
-        self.sample_size = sample_size + 1
+        self.sample_size = sample_size #+ 1
         self.norm=norm
         
         self.nc = self.dts[dataset]["nc"]
