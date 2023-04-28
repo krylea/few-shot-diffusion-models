@@ -85,6 +85,7 @@ class BaseSetsDataset(data.Dataset):
             file = pickle.load(f)
 
         map_cls = {}
+        img = None
         for i, k in enumerate(file):
 
             map_cls[i] = k
@@ -105,10 +106,16 @@ class BaseSetsDataset(data.Dataset):
                 value = value / (2**self.n_bits - 1)
             # (b, c, h, w)
             value = value.transpose(0, 3, 1, 2)
-            img.append(value.reshape(self.img_cls, -1))
+            value = value.reshape(self.img_cls, -1).astype(float)
+
+            if img is None:
+                img = np.expand_dims(value, 0)
+            else:
+                img = np.concatenate(img, np.expand_dims(value, 0))
+            #img.append()
 
         # this works only if we have the same number of samples in each class
-        img = np.array(img, dtype=np.float32)
+        #img = np.array(img, dtype=np.float32)
         lbl = np.arange(img.shape[0]).reshape(-1, 1)
         lbl = lbl.repeat(self.img_cls, 1)
         return img, lbl, map_cls
