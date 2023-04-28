@@ -111,7 +111,7 @@ class BaseSetsDataset(data.Dataset):
             if img is None:
                 img = np.expand_dims(value, 0)
             else:
-                img = np.concatenate(img, np.expand_dims(value, 0))
+                img = np.concatenate((img, np.expand_dims(value, 0)), axis=0)
             #img.append()
 
         # this works only if we have the same number of samples in each class
