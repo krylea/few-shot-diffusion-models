@@ -10,4 +10,4 @@
 #SBATCH --exclude=gpu109
 
 
-sh script/sample_conditional.sh 0 vfsddpm_${1}_vit_lag_meanpatch_sigma $2 128
+sh script/sample_conditional.sh 0 vfsddpm_${1}_vit_lag_meanpatch_sigma_outdistro $2 128
