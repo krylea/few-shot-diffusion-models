@@ -117,6 +117,15 @@ case $RUN in
     vfsddpm_celeba_vit_lag_meanpatch_sigma_outdistro)
       run 64 3 vfsddpm celeba vit lag mean_patch deterministic out-distro 16 5 64
       ;;
+    vfsddpm_animalfaces_vit_lag_meanpatch_sigma_outdistro)
+      run 128 3 vfsddpm animalfaces vit lag mean_patch deterministic out-distro 8 5 128
+      ;;
+    vfsddpm_flowers_vit_lag_meanpatch_sigma_outdistro)
+      run 128 3 vfsddpm flowers vit lag mean_patch deterministic out-distro 8 5 128
+      ;;
+    vfsddpm_vggface_vit_lag_meanpatch_sigma_outdistro)
+      run 128 3 vfsddpm vggface vit lag mean_patch deterministic out-distro 8 5 128
+      ;;
 
     # vitset lag none
     vfsddpm_cifar100_vitset_lag_none_sigma_outdistro)

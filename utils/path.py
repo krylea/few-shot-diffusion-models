@@ -1,4 +1,4 @@
-DIR="/scratch/ssd001/home/kaselby/few-shot-diffusion-models/runs"
+DIR="/scratch/ssd001/home/kaselby/fsdm/runs"
 
 import os
 def mkdirs(path):
