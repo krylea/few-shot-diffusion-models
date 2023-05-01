@@ -2,9 +2,9 @@
 
 GPU=$1
 RUN=$2
-DATE=$3
-STEP=$4
-NSAMPLES=$5
+#DATE=$3
+STEP=$3
+NSAMPLES=$4
 
 run()
 {
@@ -22,10 +22,13 @@ PATCH_SIZE=$10
 SAMPLE_SIZE=$11
 BATCH_SIZE=$12
 
+#MODEL_PATH="${DATASET}_${MODEL}_${ENCODER}_${CONDITIONING}_${POOLING}_sigma_${CONTEXT}/run-${DATE}/ema_0.995_${STEP}.pt"
+MODEL_PATH="checkpoints/${DATASET}/ema_0.995_${STEP}.pt"
+
 # use ema model for sampling
 MODEL_FLAGS="--image_size ${IMAGE_SIZE} --in_channels ${IN_CHANNELS} --num_channels 64 
 --context_channels 256 --sample_size 5 --model ${MODEL} 
---model_path ${DATASET}_${MODEL}_${ENCODER}_${CONDITIONING}_${POOLING}_sigma_${CONTEXT}/run-${DATE}/ema_0.995_${STEP}.pt  --learn_sigma True"
+--model_path ${MODEL_PATH} --learn_sigma True"
 SAMPLE_FLAGS="--batch_size ${BATCH_SIZE} --batch_size_eval ${BATCH_SIZE} --num_samples ${NSAMPLES} --timestep_respacing 250 
 --mode_conditional_sampling ${SAMPLING} --dataset ${DATASET}"
 ENCODER_FLAGS="--patch_size ${PATCH_SIZE} --encoder_mode ${ENCODER} --sample_size ${SAMPLE_SIZE} 
