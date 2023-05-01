@@ -241,7 +241,7 @@ def create_argparser():
         mode_conditioning='bias', # film, lag, 
         augment=False,
         device="cuda",
-        data_dir="/home/gigi/ns_data",
+        data_dir="data",
         transfer=False,
     )
     defaults.update(model_and_diffusion_defaults())
