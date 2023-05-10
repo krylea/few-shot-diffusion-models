@@ -150,8 +150,8 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
     data_for_fid = data[:, num:num+128, :, :, :]
     if os.path.exists(real_dir):
         for cls in tqdm(range(data_for_fid.shape[0]), desc='preparing real images'):
-            for i in range(128):
-                if data_for_fid.shape[1] < 128:
+            for i in range(args.num_samples):
+                if data_for_fid.shape[1] < args.num_samples:
                     idx = np.random.choice(data_for_fid.shape[1], 1).item()
                 else:
                     idx = i
@@ -166,13 +166,13 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
 
     if os.path.exists(fake_dir):
         for cls in tqdm(range(data_for_gen.shape[0]), desc='generating fake images'):
-            for i in range(128):
+            for i in range(args.num_samples):
                 imgpath = os.path.join(fake_dir, '{}_{}.png'.format(cls, str(i).zfill(3)))
                 if not os.path.exists(imgpath):
                     #idx = np.random.choice(data_for_gen.shape[1], n_cond)
                     imgs = data_for_gen[cls]#[cls, idx, :, :, :]
                     imgs = torch.cat([transform(img).unsqueeze(0) for img in imgs], dim=0).unsqueeze(0).cuda()
-                    fake_imgs = generate_from_batch(args, model, imgs, 1)
+                    fake_imgs = generate_from_batch(args, model, imgs, 4)
                     output = to_images(fake_imgs)
                     output.save(imgpath, 'png')
 
