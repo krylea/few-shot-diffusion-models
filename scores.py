@@ -168,8 +168,8 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
             for i in range(128):
                 imgpath = os.path.join(fake_dir, '{}_{}.png'.format(cls, str(i).zfill(3)))
                 if not os.path.exists(imgpath):
-                    idx = np.random.choice(data_for_gen.shape[1], args.n_sample_test)
-                    imgs = data_for_gen[cls, idx, :, :, :]
+                    #idx = np.random.choice(data_for_gen.shape[1], n_cond)
+                    imgs = data_for_gen#[cls, idx, :, :, :]
                     imgs = torch.cat([transform(img).unsqueeze(0) for img in imgs], dim=0).unsqueeze(0).cuda()
                     fake_imgs = generate_from_batch(args, model, imgs, 1)
                     output = to_images(fake_imgs)
