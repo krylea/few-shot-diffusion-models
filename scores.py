@@ -141,7 +141,7 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
     os.makedirs(real_dir, exist_ok=True)
 
     data = dataset.images
-    data = data.reshape(*data.shape[:2], args.in_channels, args.image_size, args.image_size)
+    data = data.reshape(*data.shape[:2], args.in_channels, args.image_size, args.image_size).transpose(0,1,3,4,2)
     per = np.random.permutation(data.shape[1])
     data = data[:, per, :, :, :]
 
@@ -161,7 +161,7 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
                 if not os.path.exists(imgpath):
                     real_img = data_for_fid[cls, idx, :, :, :]
                     real_img *= 255
-                    real_img = Image.fromarray(np.uint8(real_img.transpose(1,2,0)))
+                    real_img = Image.fromarray(np.uint8(real_img))
                     real_img.save(imgpath, 'png')
 
     if os.path.exists(fake_dir):
