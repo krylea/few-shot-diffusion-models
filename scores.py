@@ -172,7 +172,7 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
                     #idx = np.random.choice(data_for_gen.shape[1], n_cond)
                     imgs = data_for_gen[cls]#[cls, idx, :, :, :]
                     imgs = torch.cat([transform(img).unsqueeze(0) for img in imgs], dim=0).unsqueeze(0).cuda()
-                    fake_imgs = generate_from_batch(args, model, imgs, 4)
+                    fake_imgs = generate_from_batch(args, model, imgs, 1).view(args.in_channels, args.image_size, args.image_size)
                     output = to_images(fake_imgs)
                     output.save(imgpath, 'png')
 
