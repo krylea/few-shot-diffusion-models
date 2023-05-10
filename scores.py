@@ -140,7 +140,8 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
     #    shutil.rmtree(real_dir)
     os.makedirs(real_dir, exist_ok=True)
 
-    data = dataset.images.reshape(*data.shape[:2], args.in_channels, args.image_size, args.image_size)
+    data = dataset.images
+    data = data.reshape(*data.shape[:2], args.in_channels, args.image_size, args.image_size)
     per = np.random.permutation(data.shape[1])
     data = data[:, per, :, :, :]
 
