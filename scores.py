@@ -215,7 +215,7 @@ def main():
         model.convert_to_fp16()
     model.eval()
 
-    dataset = select_dataset(args)
+    dataset = select_dataset(args, "test")
 
     n_exps = args.n_exps
 
