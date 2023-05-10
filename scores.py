@@ -124,7 +124,7 @@ def generate_from_batch(args, model, batch, n_samples):
     return sample
 
 def to_images(tensors):
-    images = tensors.cpu().detach().numpy()
+    images = tensors.cpu().detach().numpy().transpose(1,2,0)
     images = ((images + 1) / 2)
     images[images < 0] = 0
     images[images > 1] = 1
@@ -170,7 +170,7 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
                 imgpath = os.path.join(fake_dir, '{}_{}.png'.format(cls, str(i).zfill(3)))
                 if not os.path.exists(imgpath):
                     #idx = np.random.choice(data_for_gen.shape[1], n_cond)
-                    imgs = data_for_gen#[cls, idx, :, :, :]
+                    imgs = data_for_gen[cls]#[cls, idx, :, :, :]
                     imgs = torch.cat([transform(img).unsqueeze(0) for img in imgs], dim=0).unsqueeze(0).cuda()
                     fake_imgs = generate_from_batch(args, model, imgs, 1)
                     output = to_images(fake_imgs)
