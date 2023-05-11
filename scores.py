@@ -166,7 +166,7 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
 
     if os.path.exists(fake_dir):
         for cls in tqdm(range(data_for_gen.shape[0]), desc='generating fake images'):
-            n_batches = args.num_samples / args.sample_size
+            n_batches = int(args.num_samples / args.sample_size)
             for i in range(n_batches):
                 idx = i * args.sample_size
                 imgpath = os.path.join(fake_dir, '{}_{}.png'.format(cls, str(idx).zfill(3)))
