@@ -38,7 +38,7 @@ MODEL_PATH="checkpoints/${DATASET}/ema_0.995_${STEP}.pt"
 
 # use ema model for sampling
 MODEL_FLAGS="--image_size ${IMAGE_SIZE} --in_channels ${IN_CHANNELS} --num_channels 64 
---context_channels 256 --sample_size 5 --model ${MODEL} 
+--context_channels 256 --model ${MODEL} 
 --model_path ${MODEL_PATH} --learn_sigma True"
 SAMPLE_FLAGS="--batch_size ${BATCH_SIZE} --batch_size_eval ${BATCH_SIZE} --num_samples ${NSAMPLES} --timestep_respacing 250 
 --mode_conditional_sampling ${SAMPLING} --dataset ${DATASET}"
