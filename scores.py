@@ -166,20 +166,18 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
 
     if os.path.exists(fake_dir):
         for cls in tqdm(range(data_for_gen.shape[0]), desc='generating fake images'):
-            n_batches = int(args.num_samples / args.sample_size)
-            for i in range(n_batches):
-                idx = i * args.sample_size
-                imgpath = os.path.join(fake_dir, '{}_{}.png'.format(cls, str(idx).zfill(3)))
-                if not os.path.exists(imgpath):
-                    #idx = np.random.choice(data_for_gen.shape[1], n_cond)
-                    imgs = data_for_gen[cls]#[cls, idx, :, :, :]
-                    imgs = torch.cat([transform(img).unsqueeze(0) for img in imgs], dim=0).unsqueeze(0).cuda()
-                    fake_imgs = generate_from_batch(args, model, imgs, args.sample_size)
-                    for j in range(args.sample_size):
-                        fake_img = fake_imgs[j].view(args.in_channels, args.image_size, args.image_size)
-                        output = to_images(fake_img)
-                        imgpath_j = os.path.join(fake_dir, '{}_{}.png'.format(cls, str(idx+j).zfill(3)))
-                        output.save(imgpath_j, 'png')
+            imgpath = os.path.join(fake_dir, '{}_{}.png'.format(cls, str(args.num_samples-1).zfill(3)))
+            if os.path.exists(imgpath):
+                continue
+            imgs = data_for_gen[cls]#[cls, idx, :, :, :]
+            imgs = torch.cat([transform(img).unsqueeze(0) for img in imgs], dim=0).unsqueeze(0).cuda()
+            fake_imgs = generate_from_batch(args, model, imgs, args.num_samples)
+            for j in range(args.num_samples):
+                fake_img = fake_imgs[j].view(args.in_channels, args.image_size, args.image_size)
+                output = to_images(fake_img)
+                imgpath_j = os.path.join(fake_dir, '{}_{}.png'.format(cls, str(idx+j).zfill(3)))
+                output.save(imgpath_j, 'png')
+                    
 
     fid_score=fid(real_dir, fake_dir, int(args.gpu))
     lpips_score=LPIPS(fake_dir)
