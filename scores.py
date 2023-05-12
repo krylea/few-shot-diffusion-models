@@ -45,6 +45,7 @@ DIR = set_folder()
 
 from fid import calculate_fid_given_paths
 import lpips
+import cv2
 
 def fid(real, fake, gpu, batch_size=50, dims=2048):
     print('Calculating FID...')
@@ -179,7 +180,7 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
                 output.save(imgpath_j, 'png')
                     
 
-    fid_score=fid(real_dir, fake_dir, int(args.gpu))
+    fid_score=fid(real_dir, fake_dir, 0)
     lpips_score=LPIPS(fake_dir)
 
     shutil.rmtree(real_dir)
