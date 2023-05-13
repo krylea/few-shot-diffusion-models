@@ -43,7 +43,7 @@ from utils.util import count_params, set_seed
 
 DIR = set_folder()
 
-from pytorch_fid import calculate_fid_given_paths
+from pytorch_fid.fid_score import calculate_fid_given_paths
 import lpips
 import cv2
 
