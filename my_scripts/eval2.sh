@@ -11,6 +11,7 @@
 
 DATASET=$1
 N_COND=$2
+RESET=${3:-0}
 
 STEP=200000
 IMAGE_SIZE=128
@@ -47,6 +48,10 @@ ENCODER_FLAGS="--patch_size ${PATCH_SIZE} --encoder_mode ${ENCODER} --sample_siz
 EVAL_FLAGS="--real_dir ${REAL_DIR} --fake_dir ${FAKE_DIR} --n_exps ${N_EXPS} --n_cond ${N_COND} 
 --eval_path ${EVAL_PATH} --eval_ckpt ${EVAL_CKPT}"
 
+if [ $RESET -eq 1 ]
+then
+    EVAL_FLAGS="${EVAL_FLAGS} --reset True"
+fi
 
 #CUDA_VISIBLE_DEVICES=$GPU \
 python scores.py $MODEL_FLAGS $SAMPLE_FLAGS $ENCODER_FLAGS $EVAL_FLAGS

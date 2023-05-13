@@ -43,7 +43,7 @@ from utils.util import count_params, set_seed
 
 DIR = set_folder()
 
-from fid import calculate_fid_given_paths
+from pytorch_fid import calculate_fid_given_paths
 import lpips
 import cv2
 
@@ -176,7 +176,7 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
             for j in range(args.num_samples):
                 fake_img = fake_imgs[j].view(args.in_channels, args.image_size, args.image_size)
                 output = to_images(fake_img)
-                imgpath_j = os.path.join(fake_dir, '{}_{}.png'.format(cls, str(idx+j).zfill(3)))
+                imgpath_j = os.path.join(fake_dir, '{}_{}.png'.format(cls, str(j).zfill(3)))
                 output.save(imgpath_j, 'png')
                     
 
@@ -224,6 +224,12 @@ def main():
 
     n_exps = args.n_exps
 
+    if args.reset:
+        if os.path.exists(args.eval_ckpt):
+            shutil.rmtree(args.eval_ckpt)
+        shutil.rmtree(args.real_dir)
+        shutil.rmtree(args.fake_dir)
+        
     if os.path.exists(args.eval_ckpt):
         eval_ckpt = torch.load(args.eval_ckpt)
         fid_scores, lpips_scores = eval_ckpt['fid'], eval_ckpt['lpips']
@@ -285,7 +291,8 @@ def create_argparser():
         transfer=False,
         n_exps=3,
         n_cond=10,
-        eval_ckpt=None
+        eval_ckpt=None,
+        reset=False
     )
     defaults.update(model_and_diffusion_defaults())
     parser = argparse.ArgumentParser()
