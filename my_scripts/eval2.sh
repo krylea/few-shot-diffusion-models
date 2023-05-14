@@ -28,7 +28,7 @@ CONDITIONING="lag"
 POOLING="mean_patch"
 CONTEXT="deterministic"
 
-EVAL_NAME="${DATASET}_${N_COND}"
+EVAL_NAME="FSDM_EVAL_${DATASET}_${N_COND}"
 
 N_EXPS=3
 EVAL_PATH="eval_results.txt"
