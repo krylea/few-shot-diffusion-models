@@ -43,6 +43,9 @@ from utils.util import count_params, set_seed
 DIR = set_folder()
 
 
+
+
+
 def main():
     args = create_argparser().parse_args()
     print(args)
@@ -102,6 +105,7 @@ def main():
     all_conditioning_images = []
 
     while len(all_images) * args.batch_size < args.num_samples * args.k:
+        pbar=tqdm.tqdm(initial=0, total=args.num_samples * args.k)
         with  torch.no_grad():
             try:
                 x_set = next(loader)
@@ -189,6 +193,7 @@ def main():
             # problem with the last batch in the loader
             except RuntimeError:
                 continue
+        pbar.update(args.batch_size)
 
     arr = np.concatenate(all_images, axis=0)
     arr = arr[: args.num_samples]
