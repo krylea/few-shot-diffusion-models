@@ -105,7 +105,7 @@ def main():
     all_conditioning_images = []
 
     while len(all_images) * args.batch_size < args.num_samples * args.k:
-        pbar=tqdm.tqdm(initial=0, total=args.num_samples * args.k)
+        pbar=tqdm(initial=0, total=args.num_samples * args.k)
         with  torch.no_grad():
             try:
                 x_set = next(loader)
