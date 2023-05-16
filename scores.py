@@ -152,10 +152,12 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
     if os.path.exists(real_dir):
         for cls in tqdm(range(data_for_fid.shape[0]), desc='preparing real images'):
             for i in range(args.num_samples):
-                if data_for_fid.shape[1] < args.num_samples:
+                if data_for_fid.shape[1] < args.num_samples and args.sample_eval:
                     idx = np.random.choice(data_for_fid.shape[1], 1).item()
                 else:
                     idx = i
+                    if i >= data_for_fid.shape[1]:
+                        break
             #for i in range(data_for_fid.shape[1]):
                 #idx=i
                 imgpath = os.path.join(real_dir, '{}_{}.png'.format(cls, str(i).zfill(3)))
