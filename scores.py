@@ -160,8 +160,7 @@ def eval_scores(args, dataset, model, n_cond, real_dir, fake_dir, transform):
                 #idx=i
                 imgpath = os.path.join(real_dir, '{}_{}.png'.format(cls, str(i).zfill(3)))
                 if not os.path.exists(imgpath):
-                    real_img = data_for_fid[cls, idx, :, :, :]
-                    real_img *= 255
+                    real_img = data_for_fid[cls, idx, :, :, :] * 255
                     real_img = Image.fromarray(np.uint8(real_img))
                     real_img.save(imgpath, 'png')
 
