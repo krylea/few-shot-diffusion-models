@@ -225,7 +225,7 @@ def main():
 
     if args.reset:
         if os.path.exists(args.eval_ckpt):
-            shutil.rmtree(args.eval_ckpt)
+            shutil.rmtree(os.path.dirname(args.eval_ckpt))
         shutil.rmtree(args.real_dir)
         shutil.rmtree(args.fake_dir)
         
