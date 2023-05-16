@@ -226,8 +226,10 @@ def main():
     if args.reset:
         if os.path.exists(args.eval_ckpt):
             shutil.rmtree(os.path.dirname(args.eval_ckpt))
-        shutil.rmtree(args.real_dir)
-        shutil.rmtree(args.fake_dir)
+        if os.path.exists(args.real_dir):
+            shutil.rmtree(args.real_dir)
+        if os.path.exists(args.fake_dir):
+            shutil.rmtree(args.fake_dir)
         
     if os.path.exists(args.eval_ckpt):
         eval_ckpt = torch.load(args.eval_ckpt)
