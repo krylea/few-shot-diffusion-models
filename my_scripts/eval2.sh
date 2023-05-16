@@ -12,7 +12,8 @@
 DATASET=$1
 N_COND=$2
 IMAGE_SIZE=${3:-128}
-RESET=${4:-0}
+SAMPLE_EVAL=${4:-0}
+RESET=${5:-0}
 
 
 STEP=200000
@@ -53,6 +54,11 @@ EVAL_FLAGS="--real_dir ${REAL_DIR} --fake_dir ${FAKE_DIR} --n_exps ${N_EXPS} --n
 if [ $RESET -eq 1 ]
 then
     EVAL_FLAGS="${EVAL_FLAGS} --reset True"
+fi
+
+if [ $SAMPLE_EVAL -eq 1 ]
+then
+    EVAL_FLAGS="${EVAL_FLAGS} --sample_eval True"
 fi
 
 #CUDA_VISIBLE_DEVICES=$GPU \

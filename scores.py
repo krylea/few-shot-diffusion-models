@@ -296,7 +296,8 @@ def create_argparser():
         n_exps=3,
         n_cond=10,
         eval_ckpt=None,
-        reset=False
+        reset=False,
+        sample_eval=False
     )
     defaults.update(model_and_diffusion_defaults())
     parser = argparse.ArgumentParser()
