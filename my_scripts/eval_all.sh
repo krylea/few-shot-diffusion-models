@@ -3,9 +3,11 @@
 NREF=(1 3 10 30)
 
 dataset=$1
-reset=${2:-0}
+image_size=${2:-128}
+reset=${3:-0}
+
 
 for nref in "${NREF[@]}"
 do
-    sbatch my_scripts/eval2.sh $dataset $nref $reset
+    sbatch my_scripts/eval2.sh $dataset $nref $image_size $reset
 done
